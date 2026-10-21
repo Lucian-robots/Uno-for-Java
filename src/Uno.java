@@ -2,7 +2,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Uno {
-     public static ArrayList<unoCards> cards() {
+    
+    // to make the deck of cards
+    public static ArrayList<unoCards> cards() {
     
         ArrayList<unoCards> cards = new ArrayList<>();
         // adding all regular play cards
@@ -151,9 +153,49 @@ public class Uno {
         return cards;
     }
 
+    // this is to draw the cards
+    public static ArrayList<unoCards> drawCards() {
+        // players cards
+        ArrayList<unoCards> playerCards = new ArrayList<>();
+        // just to use for the shuffle
+        ArrayList<unoCards> cards = cards();
+        // make the shuffled deck to then draw the cards for the player
+        ArrayList<unoCards> shuffledDeck = shuffleDeck(cards);
+        //System.out.println(shuffledDeck);
+        // draw 7 cards
+        for (int i = 0; i < 7; i++) {
+            playerCards.add(shuffledDeck.get(i));
+        }
+        for (int i = 0; i < 7; i++) {
+            shuffledDeck.remove(shuffledDeck.get(0));
+        }
+        //System.out.println("\n\n" + shuffledDeck.size() + "\n\n" + shuffledDeck + "\n\n");
+        //System.out.println(playerCards);
+        return playerCards;
+    }
+    public static void gameDriver() {
+        ArrayList<unoCards> player1 = drawCards();
+        ArrayList<unoCards> player2 = drawCards();
+        ArrayList<unoCards> player3 = drawCards();
+        ArrayList<unoCards> player4 = drawCards();
+        
+        System.out.println(player1);
+        System.out.println(player2);
+        System.out.println(player3);
+        System.out.println(player4);
+        
+        
+
+    }
+
+
+
+
+
     public static void main(String[] args) {
         ArrayList<unoCards> newCards = cards();
-        System.out.println(newCards);
-        System.out.println("\n\n\n" + shuffleDeck(newCards));
+        //System.out.println(newCards);
+        //System.out.println("\n\n\n" + shuffleDeck(newCards));
+        gameDriver();
     }
 }
