@@ -2,29 +2,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class UnoDriver {
-    public static void Main(String []args) {
-        System.out.println("Hello world");
 
-    }
-    // shuffle / create deck
-     public static ArrayList<unoCards> shuffleDeck(ArrayList<unoCards> cards) {
+    public static void gameDriver() {
+        ArrayList<unoCards> player1 = Uno();
+        ArrayList<unoCards> player2 = Uno();
+        //ArrayList<unoCards> player3 = drawCards();
+        //ArrayList<unoCards> player4 = drawCards();
         
-        Collections.shuffle(cards);
-        return cards;
-    } 
+        System.out.println(player1);  
+        System.out.println(player2);
+        //System.out.println(player3);
+        //System.out.println(player4);      
+    }
 
-    public static void drawCard() {
-        
-        ArrayList<unoCards> cards = new ArrayList<>();
-        
-        for (int i = 0; i < 7; i++) {
-            cards.get(i);
-        } 
+
+    public static void main(String[] args) {
+        ArrayList<unoCards> newCards = cards();
+        //System.out.println(newCards);
+        //System.out.println("\n\n\n" + shuffleDeck(newCards));
+        gameDriver();
     }
-    /*
-    unoCards will have an array with all cards and will shuffle the deck.
-    Uno.java will have all of the functions related to uno.
-    UnoDriver will run the game.
-    */
 }
- 

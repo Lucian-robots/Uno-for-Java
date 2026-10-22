@@ -3,6 +3,8 @@ import java.util.Collections;
 
 public class Uno {
     
+
+
     // to make the deck of cards
     public static ArrayList<unoCards> cards() {
     
@@ -146,15 +148,30 @@ public class Uno {
         return cards;
     }
 
+    private ArrayList<unoCards> Deck = cards();
+
     // Now we need to shuffle the cards!!
-    public static ArrayList<unoCards> shuffleDeck(ArrayList<unoCards> cards) {
+    public static ArrayList<unoCards> shuffleDeck(ArrayList<unoCards> Deck) {
         
-        Collections.shuffle(cards);
-        return cards;
+        Collections.shuffle(Deck);
+        return Deck;
+    }  
+
+    public unoCards draw1Card(ArrayList<unoCards> Deck) {
+        // store temp values to draw the card bc return statements are weird
+        String c1Color = Deck.get(0).getColor();
+        String c1Value = Deck.get(0).getValue();
+        // make temp card
+        unoCards c1 = new unoCards(c1Color, c1Value);
+        // remove the card we created from array
+        Deck.remove(Deck.get(0));
+        // return the drawn card
+        return c1;
     }
 
+    
     // this is to draw the cards
-    public static ArrayList<unoCards> drawCards() {
+    public ArrayList<unoCards> Uno() {
         // players cards
         ArrayList<unoCards> playerCards = new ArrayList<>();
         // just to use for the shuffle
@@ -173,29 +190,8 @@ public class Uno {
         //System.out.println(playerCards);
         return playerCards;
     }
-    public static void gameDriver() {
-        ArrayList<unoCards> player1 = drawCards();
-        ArrayList<unoCards> player2 = drawCards();
-        ArrayList<unoCards> player3 = drawCards();
-        ArrayList<unoCards> player4 = drawCards();
-        
-        System.out.println(player1);
-        System.out.println(player2);
-        System.out.println(player3);
-        System.out.println(player4);
-        
-        
-
-    }
-
-
-
-
-
-    public static void main(String[] args) {
-        ArrayList<unoCards> newCards = cards();
-        //System.out.println(newCards);
-        //System.out.println("\n\n\n" + shuffleDeck(newCards));
-        gameDriver();
-    }
+    public static void draw() {
+        ArrayList<unoCards> cards = cards();
+        ArrayList<unoCards> shuffledDeck = shuffleDeck(cards);
+    }    
 }

@@ -11,6 +11,13 @@ public class unoCards {
         this.color = tempColor;
         this.value = tempValue;
     }
+    public String getColor() {
+        return color;
+    }
+    public String getValue() {
+        return value;
+    }
+
     @Override 
     public String toString() {
         return color + " " + value;
