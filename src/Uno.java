@@ -2,7 +2,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Uno {
-    
+    public ArrayList<unoCards> deck;
+    public ArrayList<unoCards> discardPile;
+    public ArrayList<unoCards> playerHand;
+    public ArrayList<unoCards> computerHand;
+    // CONSTRUCTOR: Notice it has the exact same name as your class, and NO return type!
+    public Uno() {
+        this.deck = new ArrayList<>();
+        this.discardPile = new ArrayList<>();
+        this.playerHand = new ArrayList<>();
+        this.computerHand = new ArrayList<>();
+    }
+
 
 
     // to make the deck of cards
@@ -156,42 +167,74 @@ public class Uno {
         Collections.shuffle(Deck);
         return Deck;
     }  
+    public ArrayList<unoCards> shuffledDeck = shuffleDeck(Deck);
 
-    public unoCards draw1Card(ArrayList<unoCards> Deck) {
-        // store temp values to draw the card bc return statements are weird
-        String c1Color = Deck.get(0).getColor();
-        String c1Value = Deck.get(0).getValue();
-        // make temp card
-        unoCards c1 = new unoCards(c1Color, c1Value);
-        // remove the card we created from array
-        Deck.remove(Deck.get(0));
-        // return the drawn card
-        return c1;
+    public unoCards draw1Card(ArrayList<unoCards> shuffledDeck) {
+        return shuffledDeck.remove(0);
     }
 
+    public void/*ArrayList<unoCards>*/ discardPile(unoCards c2) {
+        // make discardPile array list
+        //ArrayList<unoCards> discardPile = new ArrayList<>();
+        // add card to it
+        this.discardPile.add(c2);
+        // return the discard pile
+        //return discardPile;
+    }
+    public ArrayList<unoCards> makeInitialHands(ArrayList<unoCards> shuffledDeck) {
+        ArrayList<unoCards> hand = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            hand.add(shuffledDeck.get(0));
+            shuffledDeck.remove(0);
+        }
+        
+        return hand;
+    }
+    public void draw() {
+        ArrayList<unoCards> cards = cards();
+        ArrayList<unoCards> shuffledDeck = shuffleDeck(cards);
+    }   
+    public String playerChoice() {
+        String choice = "";
+        
+        return choice;
+    }
     
-    // this is to draw the cards
-    public ArrayList<unoCards> Uno() {
-        // players cards
-        ArrayList<unoCards> playerCards = new ArrayList<>();
-        // just to use for the shuffle
-        ArrayList<unoCards> cards = cards();
-        // make the shuffled deck to then draw the cards for the player
-        ArrayList<unoCards> shuffledDeck = shuffleDeck(cards);
-        //System.out.println(shuffledDeck);
-        // draw 7 cards
-        for (int i = 0; i < 7; i++) {
-            playerCards.add(shuffledDeck.get(i));
-        }
-        for (int i = 0; i < 7; i++) {
-            shuffledDeck.remove(shuffledDeck.get(0));
-        }
-        //System.out.println("\n\n" + shuffledDeck.size() + "\n\n" + shuffledDeck + "\n\n");
-        //System.out.println(playerCards);
-        return playerCards;
+    
+    
+    
+    
+    ////////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
+    public void gameDriver(ArrayList<unoCards> shuffledDeck) {
+        System.out.println(shuffledDeck + "\n");
+
+        ArrayList<unoCards> playerHand = makeInitialHands(shuffledDeck);
+        playerHand = makeInitialHands(shuffledDeck);
+        playerHand.add(draw1Card(shuffledDeck));
+
+        System.out.println(playerHand);
+        System.out.println(shuffledDeck);
     }
-    public static void draw() {
-        ArrayList<unoCards> cards = cards();
-        ArrayList<unoCards> shuffledDeck = shuffleDeck(cards);
-    }    
+
+
+    public static void main(String[] args) {
+        // create your game instance
+        Uno game = new Uno();   
+    
+        // call the static method "cards()" to generate a deck
+        ArrayList<unoCards> Deck = cards();
+    
+        // pass that deck into your static method "shuffleDeck()"
+        ArrayList<unoCards> shuffledDeck = shuffleDeck(Deck);
+    
+        // drive the game using the shuffled deck
+        game.gameDriver(shuffledDeck);
+    
+        // draw 1 card
+        System.out.println(game.draw1Card(shuffledDeck));
+    }
+
 }
