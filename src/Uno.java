@@ -1,11 +1,14 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Scanner;
 
 public class Uno {
     public ArrayList<unoCards> deck;
     public ArrayList<unoCards> discardPile;
     public ArrayList<unoCards> playerHand;
     public ArrayList<unoCards> computerHand;
+    public ArrayList<unoCards> playerCardsAvalible;
+
     public int players;
     // player turn = -1 for bot and 1 for human player
     public int playerTurn;
@@ -13,6 +16,7 @@ public class Uno {
     public int pctd;
     public String currentColor;
     public String currentValue;
+    
     
     // constructor for main() 
     public Uno() {
@@ -206,21 +210,33 @@ public class Uno {
         ArrayList<unoCards> shuffledDeck = shuffleDeck(cards);
     }   
     // checking if correct color
-    public boolean isCorrectColor(unoCards c1, String currenctColor) {
+    public boolean isCorrectColor(unoCards c1) {
         boolean isColor;
         /* 
         if (c1.getColor().equals("Blue") && currentColor == "Blue") {
             isColor = true;
-        }
+        } 
         */
         if (c1.getColor().equals(currentColor)) {
             isColor = true;
         }
         else {
-            isColor = false;
+            isColor = false; 
         }
         return isColor;
         
+    }
+    // check if player has a card they can play
+    public ArrayList<unoCards> cardsToPlay() {
+        for (int i = playerHand.size(); i > 0; i--) {
+            if (isCorrectColor(playerHand.get(i)) == true) {
+                
+            }
+            else {
+
+            }
+            return playerCardsAvalible;
+        }
     }
     // play card method, checks card that is played and outputs the result. Updates pct, currentColor, currentValue
     public String playCard(unoCards c1) {
@@ -229,7 +245,7 @@ public class Uno {
             playerTurn = -(playerTurn);         
             return ("Play is reversed!"); 
         }
-        else if (c1.getValue().equals("Skip") && isCorrectColor(c1, currentColor) == true) {
+        else if (c1.getValue().equals("Skip") && isCorrectColor(c1) == true) {
             pctd = 0;
             playerTurn = playerTurn;
             return ("Next player skipped!");
@@ -247,7 +263,7 @@ public class Uno {
             }
             return "Draw 4"; 
         }
-        else if ((c1.getValue().equals("0") || c1.getValue().equals("1") || c1.getValue().equals("2") || c1.getValue().equals("3") || c1.getValue().equals("4") || c1.getValue().equals("5") || c1.getValue().equals("6") || c1.getValue().equals("7") || c1.getValue().equals("8") || c1.getValue().equals("9")) && isCorrectColor(c1, currentColor) == true) {
+        else if ((c1.getValue().equals("0") || c1.getValue().equals("1") || c1.getValue().equals("2") || c1.getValue().equals("3") || c1.getValue().equals("4") || c1.getValue().equals("5") || c1.getValue().equals("6") || c1.getValue().equals("7") || c1.getValue().equals("8") || c1.getValue().equals("9")) && isCorrectColor(c1) == true) {
             currentValue = c1.getValue();
 
             discardPile(c1);     
@@ -296,14 +312,26 @@ public class Uno {
         return choice;
     }
     
-    
-    
-    
-    
     ////////////////////////////////////////////////////////////////////////////////////
+    // making update methods so gameDriver isn't a bunch of copying and pasting the same commands
     
+    // to check value of card in discard pile
+    public void currentDiscardValue() {
+        currentValue = discardPile.get(discardPile.size()-1).getValue();    
+    }
+    public void currentDiscardColor() {
+        currentColor = discardPile.get(discardPile.size()-1).getColor();
+    }
+    public void currentPlayedColor() {
+        currentColor = shuffledDeck.get(0).getColor();
+    }
+    public void currentPlayedValue() {
+        currentValue = shuffledDeck.get(0).getValue();
+    }
+
     
-    
+    /////////////////////////////////////////////////////////////////////////////////////
+      
     public void gameDriver() {
         /* 
         System.out.println(shuffledDeck + "\n");
@@ -320,18 +348,31 @@ public class Uno {
         computerHand = makeInitialHands(shuffledDeck);
         discardPile(shuffledDeck.get(0));
         // the .add function for the discard pile goes in order of when added so we need to access the last added card, not the top card
-        currentColor = discardPile.get(discardPile.size()-1).getColor();
-        currentValue = discardPile.get(discardPile.size()-1).getValue();
-
-
+        currentDiscardColor();
+        currentDiscardValue();
 
         while (!(playerHand.size() == 0 || computerHand.size() == 0)) {
+            Scanner input = new Scanner(System.in);
+            
+            // check who has uno
             checkUno();
+            // check if they have to draw
+            if (pctd > 0) {
+                for (int i = pctd; i > 0; i--) {
+                    draw1Card(shuffledDeck);
+                }
+            } 
+            // check if they have a card they can play
+            if (canPlay(playerHand.get(0)) == true) {
+                System.out.println("What would you like to do: 1. Lay your ");
 
-
+            }
+            else {
+                
+            }
         }
+        
     }
-
 
     public static void main(String[] args) {
         // create your game instance
@@ -344,10 +385,9 @@ public class Uno {
         ArrayList<unoCards> shuffledDeck = shuffleDeck(Deck);
     
         // drive the game using the shuffled deck
-        game.gameDriver(shuffledDeck);
+        game.gameDriver();
     
         // draw 1 card
         //System.out.println(game.draw1Card(shuffledDeck));
     }
-
 }
