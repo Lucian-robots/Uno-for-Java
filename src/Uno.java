@@ -11,6 +11,7 @@ public class Uno {
     // playerCardsToDraw (pctd)
     public int pctd;
     public String currentColor;
+    public String currentValue;
     
     // CONSTRUCTOR: Notice it has the exact same name as your class, and NO return type!
     public Uno() {
@@ -173,12 +174,13 @@ public class Uno {
         Collections.shuffle(Deck);
         return Deck;
     }  
+    // make shuffled deck thing
     public ArrayList<unoCards> shuffledDeck = shuffleDeck(Deck);
-
+    // draw 1 card
     public unoCards draw1Card(ArrayList<unoCards> shuffledDeck) {
         return shuffledDeck.remove(0);
     }
-
+    // add card to discard pile
     public void/*ArrayList<unoCards>*/ discardPile(unoCards c2) {
         // make discardPile array list
         //ArrayList<unoCards> discardPile = new ArrayList<>();
@@ -187,6 +189,7 @@ public class Uno {
         // return the discard pile
         //return discardPile;
     }
+    // to draw the initial 7 cards
     public ArrayList<unoCards> makeInitialHands(ArrayList<unoCards> shuffledDeck) {
         ArrayList<unoCards> hand = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
@@ -196,16 +199,36 @@ public class Uno {
         
         return hand;
     }
+    // draw 1 card  BROKEN
     public void draw() {
         ArrayList<unoCards> cards = cards();
         ArrayList<unoCards> shuffledDeck = shuffleDeck(cards);
     }   
+    // checking if correct color
+    public boolean isCorrectColor(unoCards c1, String currenctColor) {
+        boolean isColor;
+        /* 
+        if (c1.getColor().equals("Blue") && currentColor == "Blue") {
+            isColor = true;
+        }
+        */
+        if (c1.getColor().equals(currentColor)) {
+            isColor = true;
+        }
+        else {
+            isColor = false;
+        }
+        return isColor;
+        
+    }
+    // play card method, checks card that is played and outputs the result. Updates pct, currentColor, currentValue
     public String playCard(unoCards c1) {
         if (c1.getValue().equals("Reverse")) {
             playerTurn = -(playerTurn);         
             return ("Play is reversed!"); 
         }
-        else if (c1.getValue().equals("Skip")) {
+        else if (c1.getValue().equals("Skip") && isCorrectColor(c1, currentColor) == true) {
+            pctd = 0;
             playerTurn = playerTurn;
             return ("Next player skipped!");
         }
@@ -218,13 +241,28 @@ public class Uno {
             for (int i = 0; i < 4; i++) {
                 playerHand.add(draw1Card(shuffledDeck));
             }
-            return "Draw 4";
+            return "Draw 4"; 
         }
-
+        else if ((c1.getValue().equals("0") || c1.getValue().equals("1") || c1.getValue().equals("2") || c1.getValue().equals("3") || c1.getValue().equals("4") || c1.getValue().equals("5") || c1.getValue().equals("6") || c1.getValue().equals("7") || c1.getValue().equals("8") || c1.getValue().equals("9")) && isCorrectColor(c1, currentColor) == true) {
+            currentValue = c1.getValue();
+            
+            discardPile(c1);     
+            playerTurn = -(playerTurn);
+            return "Card played, next persons turn";
+        }
+        else if(!(c1.getColor().equals(currentColor))) {
+            if (c1.getValue.equals(currentValue)) {
+                pctd = 0;
+                return "Card played";
+            }
+            else {
+                pctd+=1;
+                return "Incorrect color, you have to draw";
+            }
+        }
         else {
-
-        }
-        return "";
+            return "no card was played?";
+        }       
     }
     
     public String playerChoice(ArrayList<unoCards> shuffledDeck, String choice) {
