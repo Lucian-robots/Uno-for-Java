@@ -6,6 +6,12 @@ public class Uno {
     public ArrayList<unoCards> discardPile;
     public ArrayList<unoCards> playerHand;
     public ArrayList<unoCards> computerHand;
+    public int players;
+    public int playerTurn;
+    // playerCardsToDraw (pctd)
+    public int pctd;
+    public String currentColor;
+    
     // CONSTRUCTOR: Notice it has the exact same name as your class, and NO return type!
     public Uno() {
         this.deck = new ArrayList<>();
@@ -194,9 +200,41 @@ public class Uno {
         ArrayList<unoCards> cards = cards();
         ArrayList<unoCards> shuffledDeck = shuffleDeck(cards);
     }   
-    public String playerChoice() {
-        String choice = "";
-        
+    public String playCard(unoCards c1) {
+        if (c1.getValue().equals("Reverse")) {
+            playerTurn = -(playerTurn);         
+            return ("Play is reversed!"); 
+        }
+        else if (c1.getValue().equals("Skip")) {
+            playerTurn = playerTurn;
+            return ("Next player skipped!");
+        }
+        else if (c1.getValue().equals("")) {
+            return "Wild card, choose color";
+
+        }
+        else if (c1.getValue().equals("Draw 4")) {
+            pctd +=4;
+            for (int i = 0; i < 4; i++) {
+                playerHand.add(draw1Card(shuffledDeck));
+            }
+            return "Draw 4";
+        }
+
+        else {
+
+        }
+        return "";
+    }
+    
+    public String playerChoice(ArrayList<unoCards> shuffledDeck, String choice) {
+
+        if (choice.equals("draw")) {
+            draw1Card(shuffledDeck);
+        }
+        else if (choice.equals("playcard")) {
+            
+        }
         return choice;
     }
     
