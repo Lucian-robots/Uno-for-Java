@@ -7,7 +7,7 @@ public class Uno {
     public ArrayList<unoCards> discardPile;
     public ArrayList<unoCards> playerHand;
     public ArrayList<unoCards> computerHand;
-    public ArrayList<unoCards> playerCardsAvalible;
+    public ArrayList<unoCards> playerCardsAvalible = new ArrayList<>();
 
     public int players;
     // player turn = -1 for bot and 1 for human player
@@ -182,8 +182,11 @@ public class Uno {
     // make shuffled deck thing
     public ArrayList<unoCards> shuffledDeck = shuffleDeck(Deck);
     // draw 1 card
-    public unoCards draw1Card(ArrayList<unoCards> shuffledDeck) {
-        return shuffledDeck.remove(0);
+    public void draw1Card() {      
+        unoCards c1 = new unoCards(shuffledDeck.get(0).getColor(), shuffledDeck.get(0).getValue());
+        
+        playerHand.add(c1);
+        shuffledDeck.remove(c1);
     }
     // add card to discard pile
     public void/*ArrayList<unoCards>*/ discardPile(unoCards c2) {      
@@ -193,7 +196,7 @@ public class Uno {
         //return discardPile;
     }
     // to draw the initial 7 cards
-    public ArrayList<unoCards> makeInitialHands(ArrayList<unoCards> shuffledDeck) {
+    public ArrayList<unoCards> makeInitialHands() {
         ArrayList<unoCards> hand = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             hand.add(shuffledDeck.get(0));
@@ -265,7 +268,7 @@ public class Uno {
             currentValue = "-1";
             pctd +=4;
             for (int i = 0; i < 4; i++) {
-                playerHand.add(draw1Card(shuffledDeck));
+                draw1Card();
             }
             return "Draw 4"; 
         }
@@ -306,11 +309,11 @@ public class Uno {
         }
     }
 
-
+    // playerChoice calls the correct method depending on the choice and the card c1
     public String playerChoice(/*ArrayList<unoCards> shuffledDeck, */String choice, unoCards c1) {
 
         if (choice.equals("draw")) {
-            draw1Card(shuffledDeck);
+            draw1Card();
         }
         else if (choice.equals("playcard")) {
             playCard(c1);
@@ -319,18 +322,26 @@ public class Uno {
     }
     
     public void makeCardsAvalible() {
-        for (int i = 0; i < playerHand.size(); i++) {
-            if (playerHand.get(i).getColor().equals(currentColor)) {
+        for (int i = 0; i < playerHand.size()-1; i++) {
+            if ((playerHand.get(i).getColor()).equals(currentColor)) {
                 playerCardsAvalible.add(playerHand.get(i));
             }
             else if (playerHand.get(i).getValue().equals(currentValue)) {
                 playerCardsAvalible.add(playerHand.get(i));
             }
             else {
-                // nothing happens
+                // nothing happens delete this 
             }
         }
         
+    }
+    public void makeSureWildNotFirst() {
+        if ((shuffledDeck.get(0).getColor()).equals("Wild")) {
+            unoCards c2 = new unoCards(shuffledDeck.get(0).getColor(), shuffledDeck.get(0).getValue());
+            shuffledDeck.remove(0);
+            shuffledDeck.add(c2);
+
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -366,15 +377,22 @@ public class Uno {
         System.out.println(shuffledDeck);
         */
         
-        playerHand = makeInitialHands(shuffledDeck);
-        computerHand = makeInitialHands(shuffledDeck);
+
+        playerHand = makeInitialHands();
+        computerHand = makeInitialHands();
         discardPile(shuffledDeck.get(0));
+        
         // the .add function for the discard pile goes in order of when added so we need to access the last added card, not the top card
         System.out.println(discardPile);
+        
+        // make the currenct color and value on the top of the discard pile
         currentDiscardColor();
         currentDiscardValue();
+        System.out.println(currentColor + " currenct Value: " + currentValue);
+        // check anything in player hand
         System.out.println(playerHand);
-        makeCardsAvalible();
+        System.out.println(shuffledDeck);
+        
         while (!(playerHand.isEmpty() || computerHand.isEmpty())) {
             Scanner input = new Scanner(System.in);
             
@@ -384,22 +402,25 @@ public class Uno {
             if (pctd > 0) {
                 for (int i = pctd; i > 0; i--) {
                     System.out.println("You have to draw 1 card");
-                    draw1Card(shuffledDeck);
+                    draw1Card();
                 }
             } 
             // check if they have a card they can play
             if (!(playerCardsAvalible.isEmpty())) {
                 //System.out.println("Your current cards are: " + playerHand + "\nbut these are the ones you can actually play: " + playerCardsAvalible + "\nWhat card will you play? (0 is starting card) 0-" + playerCardsAvalible.size());
                 makeCardsAvalible();
-                System.out.println("Your current cards are: " + playerHand + "\nbut these are the ones you can actually play: " + playerCardsAvalible + "\nWhat card will you play? (0 is starting card) 0-" + playerCardsAvalible.size());
+                System.out.println("Your current cards are: " + playerHand + "\nbut these are the ones you can actually play: " + playerCardsAvalible + "\nWhat card will you play? (0 is starting card) 0-" + (playerCardsAvalible.size()-1));
                 int choice = input.nextInt();
                 playCard(playerCardsAvalible.get(choice));
             }
             else {
                 System.out.println("You cannot play a card so you must draw 1");
-                playerHand.add(draw1Card(shuffledDeck));
+                draw1Card();
+                System.out.println("New card was: " + playerHand.get((playerHand.size())-1));
+                System.out.println(playerHand);
             }
         }
+        System.out.println(playerHand);
         
     }
 
@@ -419,4 +440,4 @@ public class Uno {
         // draw 1 card
         //System.out.println(game.draw1Card(shuffledDeck));
     }
-}
+} 

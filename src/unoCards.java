@@ -12,10 +12,10 @@ public class unoCards {
         this.value = tempValue;
     }
     public String getColor() {
-        return color;
+        return this.color;
     }
     public String getValue() {
-        return value;
+        return this.value;
     }
 
     @Override 
