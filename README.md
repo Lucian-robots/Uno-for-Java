@@ -1,18 +1,8 @@
-## Getting Started
+Uno for Java is exactly what it is.
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+## How to play:
+um, it's not done yet so I will update this later
 
-## Folder Structure
-
-The workspace contains two folders by default, where:
-
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+## How it's made:
+I made it using a unoCards class that has a constructor for an uno card and has a few getter methods and then the main Uno file has all of the game stuff. 
+The project is a WIP and I still haven't coded an opponent player. Maybe I will add a GUI if I have time.
