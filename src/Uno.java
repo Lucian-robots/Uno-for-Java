@@ -184,9 +184,8 @@ public class Uno {
     // draw 1 card
     public void draw1Card() {      
         unoCards c1 = new unoCards(shuffledDeck.get(0).getColor(), shuffledDeck.get(0).getValue());
-        
         playerHand.add(c1);
-        shuffledDeck.remove(c1);
+        shuffledDeck.remove(0);
     }
     // add card to discard pile
     public void/*ArrayList<unoCards>*/ discardPile(unoCards c2) {      
@@ -391,7 +390,7 @@ public class Uno {
         System.out.println(currentColor + " currenct Value: " + currentValue);
         // check anything in player hand
         System.out.println(playerHand);
-        System.out.println(shuffledDeck);
+        //System.out.println(shuffledDeck);
         
         while (!(playerHand.isEmpty() || computerHand.isEmpty())) {
             Scanner input = new Scanner(System.in);
@@ -406,7 +405,7 @@ public class Uno {
                 }
             } 
             // check if they have a card they can play
-            if (!(playerCardsAvalible.isEmpty())) {
+            if (!(playerCardsAvalible.isEmpty())) { 
                 //System.out.println("Your current cards are: " + playerHand + "\nbut these are the ones you can actually play: " + playerCardsAvalible + "\nWhat card will you play? (0 is starting card) 0-" + playerCardsAvalible.size());
                 makeCardsAvalible();
                 System.out.println("Your current cards are: " + playerHand + "\nbut these are the ones you can actually play: " + playerCardsAvalible + "\nWhat card will you play? (0 is starting card) 0-" + (playerCardsAvalible.size()-1));
@@ -418,6 +417,7 @@ public class Uno {
                 draw1Card();
                 System.out.println("New card was: " + playerHand.get((playerHand.size())-1));
                 System.out.println(playerHand);
+                makeCardsAvalible();
             }
         }
         System.out.println(playerHand);
