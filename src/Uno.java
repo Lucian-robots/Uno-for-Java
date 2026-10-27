@@ -346,7 +346,15 @@ public class Uno {
         return choice;
     }
     
-    public void makeCardsAvalible() {
+
+    // this is the big problem. Needs to make sure if you have 4 draw 4's that they can't exist and also needs to check how many are in the shuffle deck
+    /*
+    first, it needs to check if the card in the array list exists either 1 time in the deck, or in the players hand
+        next it needs to check how many of that card exist in the memory / deck
+            then, using that value it will see how many exist in the arrayList already and if the card exists too many times after it was found, it will be deleted and not added back to the array list
+                then, it will also see if it is printing a duplicate of that card when the method is run, or if it was a duplicate that was actually drawn
+
+        put code here for "storage" :
         for (int i = 0; i < playerHand.size()-1; i++) {
             if ((playerHand.get(i).getColor()).equals(currentColor)) {
                 playerCardsAvalible.add(playerHand.get(i));
@@ -358,8 +366,33 @@ public class Uno {
                 // nothing happens delete this 
             }
         }
-        
+
+
+        if index at shuffled deck > 0
+            if index at avalibl cards > 0
+                then dont add
+            else if the card is still in the shuffledDeck
+                don't add the card
+        else 
+            if the card has a value of 0, it only exists 1 time
+
+        at the beginning, check if the card has 2 variants, 1 variant, or 4 variants
+    */
+    public void makeCardsAvalible() {
+        playerCardsAvalible.clear();
+        for (int i = 0; i < playerHand.size()-1; i++) {
+            if ((playerHand.get(i).getColor()).equals(currentColor)) {
+                playerCardsAvalible.add(playerHand.get(i));
+            }
+            else if (playerHand.get(i).getValue().equals(currentValue)) {
+                playerCardsAvalible.add(playerHand.get(i));
+            }
+            else {
+                // nothing happens delete this 
+            }
+        }
     }
+
     public void makeSureWildNotFirst() {
         if ((shuffledDeck.get(0).getColor()).equals("Wild")) {
             unoCards c2 = new unoCards(shuffledDeck.get(0).getColor(), shuffledDeck.get(0).getValue());
@@ -442,13 +475,14 @@ public class Uno {
                 System.out.println(playCard(playerCardsAvalible.get(choice)));
                 //0
                 // playerCardsAvalible.remove(choice);
+                makeCardsAvalible();
             }
             else {
                 System.out.println("You cannot play a card so you must draw 1");
                 draw1Card();
                 System.out.println("New card was: " + playerHand.get((playerHand.size())-1));
                 System.out.println(playerHand);
-                //makeCardsAvalible();
+                makeCardsAvalible();
             }
         }
         System.out.println(playerHand);
