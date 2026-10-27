@@ -13,7 +13,7 @@ public class Uno {
     // player turn = -1 for bot and 1 for human player
     public int playerTurn;
     // playerCardsToDraw (pctd)
-    public int pctd = 1;
+    public int pctd;
     public String currentColor;
     public String currentValue;
     
@@ -288,6 +288,18 @@ public class Uno {
             }
             return "Draw 4"; 
         }
+        else if (c1.getValue().equals("Draw 2")) {
+            currentValue = "-1";
+            pctd +=2;
+            currentColor = c1.getColor();
+            currentValue = c1.getValue();
+            playerHand.remove(c1);
+            playerCardsAvalible.remove(c1);
+            for (int i = 0; i < 2; i++) {
+                draw1Card();
+            }
+            return "Draw 2"; 
+        }
         else if ((c1.getValue().equals("0") || c1.getValue().equals("1") || c1.getValue().equals("2") || c1.getValue().equals("3") || c1.getValue().equals("4") || c1.getValue().equals("5") || c1.getValue().equals("6") || c1.getValue().equals("7") || c1.getValue().equals("8") || c1.getValue().equals("9")) && isCorrectColor(c1) == true) {
             currentValue = c1.getValue();
 
@@ -380,7 +392,7 @@ public class Uno {
     */
     public void makeCardsAvalible() {
         playerCardsAvalible.clear();
-        for (int i = 0; i < playerHand.size()-1; i++) {
+        for (int i = 0; i < playerHand.size(); i++) {
             if ((playerHand.get(i).getColor()).equals(currentColor)) {
                 playerCardsAvalible.add(playerHand.get(i));
             }
@@ -450,18 +462,18 @@ public class Uno {
         // check anything in player hand
         //System.out.println(playerHand);
         //System.out.println(shuffledDeck);
-         
+        Scanner input = new Scanner(System.in);
         while (!(playerHand.isEmpty() || computerHand.isEmpty())) {
-            Scanner input = new Scanner(System.in);
             
             // check who has uno
             checkUno();
             // check if they have to draw
             if (pctd > 0) {
                 for (int i = pctd; i > 0; i--) {
-                    System.out.println("You have to draw 1 card");
-                    draw1Card();
+                    System.out.println("You have to draw 1 card because PCTD = ");
+                    draw1Card(); 
                 }
+                pctd =0;
             }
             makeCardsAvalible();
             // check if they have a card they can play
@@ -475,7 +487,7 @@ public class Uno {
                 System.out.println(playCard(playerCardsAvalible.get(choice)));
                 //0
                 // playerCardsAvalible.remove(choice);
-                makeCardsAvalible();
+                makeCardsAvalible(); 
             }
             else {
                 System.out.println("You cannot play a card so you must draw 1");
@@ -485,13 +497,13 @@ public class Uno {
                 makeCardsAvalible();
             }
         }
-        System.out.println(playerHand);
-        
+        //System.out.println(playerHand);
+        //makeCardsAvalible();
     }
     
     public static void main(String[] args) { 
         // create your game instance
-        Uno game = new Uno();
+       Uno game = new Uno();
     
         // call the static method "cards()" to generate a deck
         ArrayList<unoCards> Deck = cards();
