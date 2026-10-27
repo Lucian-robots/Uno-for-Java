@@ -13,7 +13,7 @@ public class Uno {
     // player turn = -1 for bot and 1 for human player
     public int playerTurn;
     // playerCardsToDraw (pctd)
-    public int pctd;
+    public int pctd = 1;
     public String currentColor;
     public String currentValue;
     
@@ -250,22 +250,39 @@ public class Uno {
     public String playCard(unoCards c1) {
         if (c1.getValue().equals("Reverse")) {
             currentValue = "-1";
-            playerTurn = -(playerTurn);         
+            playerTurn = -(playerTurn);
+            currentColor = c1.getColor();
+            currentValue = c1.getValue();
+            playerHand.remove(c1);
+            playerCardsAvalible.remove(c1);
             return ("Play is reversed!"); 
+
         }
         else if (c1.getValue().equals("Skip") && isCorrectColor(c1) == true) {
             pctd = 0;
             playerTurn = playerTurn;
+            currentColor = c1.getColor();
+            currentValue = c1.getValue();
+            playerHand.remove(c1);
+            playerCardsAvalible.remove(c1);
             return ("Next player skipped!");
         }
         else if (c1.getValue().equals("")) {
             currentValue = "-1";
+            currentColor = c1.getColor();
+            currentValue = c1.getValue();
+            playerHand.remove(c1);
+            playerCardsAvalible.remove(c1);
             return "Wild card, choose color";
 
         }
         else if (c1.getValue().equals("Draw 4")) {
             currentValue = "-1";
             pctd +=4;
+            currentColor = c1.getColor();
+            currentValue = c1.getValue();
+            playerHand.remove(c1);
+            playerCardsAvalible.remove(c1);
             for (int i = 0; i < 4; i++) {
                 draw1Card();
             }
@@ -276,16 +293,25 @@ public class Uno {
 
             discardPile(c1);     
             playerTurn = -(playerTurn);
+            currentColor = c1.getColor();
+            currentValue = c1.getValue();
+            playerHand.remove(c1);
+            playerCardsAvalible.remove(c1);
             return "Card played, next persons turn";
         }
-        else if(!(c1.getColor().equals(currentColor))) {
+        else if((!(c1.getColor().equals(currentColor))) || c1.getValue().equals(currentValue)) {
             if (c1.getValue().equals(currentValue)) {
                 currentValue = c1.getValue();
                 pctd = 0;
+                currentColor = c1.getColor();
+                currentValue = c1.getValue();
+                playerHand.remove(c1);
+            playerCardsAvalible.remove(c1);
                 return "Card played";
             }
             else {
-
+                currentColor = c1.getColor();
+                currentValue = c1.getValue();
                 pctd+=1;
                 return "Incorrect color, you have to draw";
             }
@@ -345,7 +371,7 @@ public class Uno {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
     // making update methods so gameDriver isn't a bunch of copying and pasting the same commands
-    
+     
     // to check value of card in discard pile
     public void currentDiscardValue() {
         currentValue = discardPile.get(discardPile.size()-1).getValue();    
@@ -382,16 +408,16 @@ public class Uno {
         discardPile(shuffledDeck.get(0));
         
         // the .add function for the discard pile goes in order of when added so we need to access the last added card, not the top card
-        System.out.println(discardPile);
+        //System.out.println(discardPile);
         
         // make the currenct color and value on the top of the discard pile
         currentDiscardColor();
         currentDiscardValue();
         System.out.println(currentColor + " currenct Value: " + currentValue);
         // check anything in player hand
-        System.out.println(playerHand);
+        //System.out.println(playerHand);
         //System.out.println(shuffledDeck);
-        
+         
         while (!(playerHand.isEmpty() || computerHand.isEmpty())) {
             Scanner input = new Scanner(System.in);
             
@@ -403,30 +429,35 @@ public class Uno {
                     System.out.println("You have to draw 1 card");
                     draw1Card();
                 }
-            } 
+            }
+            makeCardsAvalible();
             // check if they have a card they can play
             if (!(playerCardsAvalible.isEmpty())) { 
                 //System.out.println("Your current cards are: " + playerHand + "\nbut these are the ones you can actually play: " + playerCardsAvalible + "\nWhat card will you play? (0 is starting card) 0-" + playerCardsAvalible.size());
-                makeCardsAvalible();
+                //makeCardsAvalible();
+                System.out.println("\nThe current color is: " + currentColor + "    and the current value is: " + currentValue + "\n");
+                
                 System.out.println("Your current cards are: " + playerHand + "\nbut these are the ones you can actually play: " + playerCardsAvalible + "\nWhat card will you play? (0 is starting card) 0-" + (playerCardsAvalible.size()-1));
                 int choice = input.nextInt();
-                playCard(playerCardsAvalible.get(choice));
+                System.out.println(playCard(playerCardsAvalible.get(choice)));
+                //0
+                // playerCardsAvalible.remove(choice);
             }
             else {
                 System.out.println("You cannot play a card so you must draw 1");
                 draw1Card();
                 System.out.println("New card was: " + playerHand.get((playerHand.size())-1));
                 System.out.println(playerHand);
-                makeCardsAvalible();
+                //makeCardsAvalible();
             }
         }
         System.out.println(playerHand);
         
     }
-
+    
     public static void main(String[] args) { 
         // create your game instance
-        Uno game = new Uno();    
+        Uno game = new Uno();
     
         // call the static method "cards()" to generate a deck
         ArrayList<unoCards> Deck = cards();
