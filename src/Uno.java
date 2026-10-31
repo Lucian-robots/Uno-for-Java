@@ -423,13 +423,13 @@ public class Uno {
     */
     }
     //
-     public void makeCardsAvalibleCOM() {
+    public void makeCardsAvalibleCOM() {
         computerCardsAvalible.clear();
         for (int i = 0; i < computerHand.size(); i++) {
             if ((computerHand.get(i).getColor()).equals(currentColor)) {
-                computerCardsAvalible.add(playerHand.get(i));
+                computerCardsAvalible.add(computerHand.get(i));
             }
-            else if (playerHand.get(i).getValue().equals(currentValue)) {
+            else if (computerHand.get(i).getValue().equals(currentValue)) {
                 computerCardsAvalible.add(computerHand.get(i));
             }
             else {
@@ -482,7 +482,39 @@ public class Uno {
         return false;
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-      
+    // instead of controlling the players actions in gameDriver, i'll make a seperate method just for the players choices
+    public void playerChoices() {
+        Scanner input = new Scanner(System.in);
+        if (pctd > 0) {
+                for (int i = pctd; i > 0; i--) {
+                    System.out.println("You have to draw 1 card because PCTD = ");
+                    draw1Card(); 
+                }
+                pctd =0;
+            }
+            makeCardsAvalible();
+            // check if they have a card they can play
+            if (!(playerCardsAvalible.isEmpty())) { 
+                //System.out.println("Your current cards are: " + playerHand + "\nbut these are the ones you can actually play: " + playerCardsAvalible + "\nWhat card will you play? (0 is starting card) 0-" + playerCardsAvalible.size());
+                //makeCardsAvalible();
+                System.out.println("\nThe current color is: " + currentColor + "    and the current value is: " + currentValue + "\n");
+                
+                System.out.println("Your current cards are: " + playerHand + "\nbut these are the ones you can actually play: " + playerCardsAvalible + "\nWhat card will you play? (0 is starting card) 0-" + (playerCardsAvalible.size()-1));
+                int choice = input.nextInt();
+                System.out.println(playCard(playerCardsAvalible.get(choice)));
+                //0
+                // playerCardsAvalible.remove(choice);
+                makeCardsAvalible(); 
+            }
+            else {
+                System.out.println("You cannot play a card so you must draw 1");
+                draw1Card();
+                System.out.println("New card was: " + playerHand.get((playerHand.size())-1));
+                System.out.println(playerHand);
+                makeCardsAvalible();
+            }
+    }
+
     public void gameDriver() {
         /* 
         System.out.println(shuffledDeck + "\n");
@@ -516,35 +548,8 @@ public class Uno {
             // check who has uno
             checkUno();
             // check if they have to draw
-            if (pctd > 0) {
-                for (int i = pctd; i > 0; i--) {
-                    System.out.println("You have to draw 1 card because PCTD = ");
-                    draw1Card(); 
-                }
-                pctd =0;
-            }
-            makeCardsAvalible();
-            // check if they have a card they can play
-            if (!(playerCardsAvalible.isEmpty())) { 
-                //System.out.println("Your current cards are: " + playerHand + "\nbut these are the ones you can actually play: " + playerCardsAvalible + "\nWhat card will you play? (0 is starting card) 0-" + playerCardsAvalible.size());
-                //makeCardsAvalible();
-                System.out.println("\nThe current color is: " + currentColor + "    and the current value is: " + currentValue + "\n");
-                
-                System.out.println("Your current cards are: " + playerHand + "\nbut these are the ones you can actually play: " + playerCardsAvalible + "\nWhat card will you play? (0 is starting card) 0-" + (playerCardsAvalible.size()-1));
-                int choice = input.nextInt();
-                System.out.println(playCard(playerCardsAvalible.get(choice)));
-                //0
-                // playerCardsAvalible.remove(choice);
-                makeCardsAvalible(); 
-            }
-            else {
-                System.out.println("You cannot play a card so you must draw 1");
-                draw1Card();
-                System.out.println("New card was: " + playerHand.get((playerHand.size())-1));
-                System.out.println(playerHand);
-                makeCardsAvalible();
-            }
-            computerChoice();
+            playerChoices(); 
+            computerPlayer();  
         }
          
         //System.out.println(playerHand);
@@ -578,8 +583,9 @@ public class Uno {
     }
     /*
     needs to check if theres a wild card, index how many cards they have of that color, then choose accordingly
-    */
+    */ 
     public void computerPlayer() {
+        makeCardsAvalibleCOM();
         if (pctd > 0 && isTopCardDraw() == true) {
             if (computerCardFindBool("Wild", "Draw 4") == true) {
                 playCard(computerCardFind("Wild", "Draw 4"));
@@ -666,6 +672,7 @@ public class Uno {
     }
     public void computerChoice() {
         // needs to know that top card, depends on what cards there are left in deck. also, needs to pick its own cards. use MakeCardsAvalible for computer player or sum
+        makeCardsAvalibleCOM();
         if (!(computerCardsAvalible.isEmpty())) {
             for (int i = 0; i < computerCardsAvalible.size(); i++) {
                 if (isCorrectValue(computerCardsAvalible.get(i)) == true) {   
@@ -686,6 +693,6 @@ public class Uno {
             // draw card for the computer 
         }
     }
-} 
+}  
 
-// hi   
+// hi  
