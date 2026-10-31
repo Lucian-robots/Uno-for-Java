@@ -254,6 +254,8 @@ public class Uno {
             playerTurn = -(playerTurn);
             currentColor = c1.getColor();
             currentValue = c1.getValue();
+            computerHand.remove(c1);
+            computerCardsAvalible.remove(c1);
             playerHand.remove(c1);
             playerCardsAvalible.remove(c1);
             return ("Play is reversed!"); 
@@ -264,6 +266,8 @@ public class Uno {
             playerTurn = playerTurn;
             currentColor = c1.getColor();
             currentValue = c1.getValue();
+            computerHand.remove(c1);
+            computerCardsAvalible.remove(c1);
             playerHand.remove(c1);
             playerCardsAvalible.remove(c1);
             return ("Next player skipped!");
@@ -272,6 +276,8 @@ public class Uno {
             currentValue = "-1";
             currentColor = c1.getColor();
             currentValue = c1.getValue();
+            computerHand.remove(c1);
+            computerCardsAvalible.remove(c1);
             playerHand.remove(c1);
             playerCardsAvalible.remove(c1);
             return "Wild card, choose color";
@@ -282,6 +288,8 @@ public class Uno {
             pctd +=4;
             currentColor = c1.getColor();
             currentValue = c1.getValue();
+            computerHand.remove(c1);
+            computerCardsAvalible.remove(c1);
             playerHand.remove(c1);
             playerCardsAvalible.remove(c1);
             for (int i = 0; i < 4; i++) {
@@ -294,6 +302,8 @@ public class Uno {
             pctd +=2;
             currentColor = c1.getColor();
             currentValue = c1.getValue();
+            computerHand.remove(c1);
+            computerCardsAvalible.remove(c1);
             playerHand.remove(c1);
             playerCardsAvalible.remove(c1);
             for (int i = 0; i < 2; i++) {
@@ -308,6 +318,8 @@ public class Uno {
             playerTurn = -(playerTurn);
             currentColor = c1.getColor();
             currentValue = c1.getValue();
+            computerHand.remove(c1);
+            computerCardsAvalible.remove(c1);
             playerHand.remove(c1);
             playerCardsAvalible.remove(c1);
             return "Card played, next persons turn";
@@ -318,8 +330,10 @@ public class Uno {
                 pctd = 0;
                 currentColor = c1.getColor();
                 currentValue = c1.getValue();
+                computerHand.remove(c1);
+                computerCardsAvalible.remove(c1);
                 playerHand.remove(c1);
-            playerCardsAvalible.remove(c1);
+                playerCardsAvalible.remove(c1);
                 return "Card played";
             }
             else {
@@ -487,7 +501,7 @@ public class Uno {
         Scanner input = new Scanner(System.in);
         if (pctd > 0) {
                 for (int i = pctd; i > 0; i--) {
-                    System.out.println("You have to draw 1 card because PCTD = ");
+                    System.out.println("\tYou have to draw 1 card because cards to draw = " + pctd);
                     draw1Card(); 
                 }
                 pctd =0;
@@ -501,13 +515,17 @@ public class Uno {
                 
                 System.out.println("Your current cards are: " + playerHand + "\nbut these are the ones you can actually play: " + playerCardsAvalible + "\nWhat card will you play? (0 is starting card) 0-" + (playerCardsAvalible.size()-1));
                 int choice = input.nextInt();
+                if (playerCardsAvalible.get(choice).getColor().equals("Wild")) {
+                    System.out.println("What is the color? (Needs to be capitial ex. Blue");
+                    currentColor = input.nextLine();
+                }
                 System.out.println(playCard(playerCardsAvalible.get(choice)));
                 //0
                 // playerCardsAvalible.remove(choice);
                 makeCardsAvalible(); 
             }
             else {
-                System.out.println("You cannot play a card so you must draw 1");
+                System.out.println("\tYou cannot play a card so you must draw 1");
                 draw1Card();
                 System.out.println("New card was: " + playerHand.get((playerHand.size())-1));
                 System.out.println(playerHand);
@@ -544,13 +562,14 @@ public class Uno {
         //System.out.println(shuffledDeck);
         Scanner input = new Scanner(System.in);
         while (!(playerHand.isEmpty() || computerHand.isEmpty())) {
-            
+             
             // check who has uno
             checkUno();
             // check if they have to draw
             playerChoices(); 
             computerPlayer();  
         }
+        System.out.println("COMPUTER PLAYER WINS!!!");
          
         //System.out.println(playerHand);
         //makeCardsAvalible(); 
@@ -585,8 +604,16 @@ public class Uno {
     needs to check if theres a wild card, index how many cards they have of that color, then choose accordingly
     */ 
     public void computerPlayer() {
+        if (pctd > 0) {
+            for (int i = 0; i < pctd; i ++) {
+                draw1CardCom();
+                System.out.println("Computer has to draw");
+            }
+            pctd = 0;
+        }
+        
         makeCardsAvalibleCOM();
-        if (pctd > 0 && isTopCardDraw() == true) {
+        if (isTopCardDraw() == true) {
             if (computerCardFindBool("Wild", "Draw 4") == true) {
                 playCard(computerCardFind("Wild", "Draw 4"));
             }
@@ -678,18 +705,25 @@ public class Uno {
                 if (isCorrectValue(computerCardsAvalible.get(i)) == true) {   
                     if (!(computerColorChoice().equals(currentColor))) {                  
                         playCard(findNumCard());
+                        break;
                     } 
                 }
                 else if (computerCardsAvalible.get(i).getColor().equals("Wild")) {
+                    System.out.println("Computer plays " + computerCardsAvalible.get(i));
                     playCard(computerCardsAvalible.get(i));
+                    break;
                 }
                 else if (computerCardsAvalible.get(i).getColor().equals(currentColor)) {
+                    System.out.println("Computer plays " + computerCardsAvalible.get(i));
                     playCard(computerCardsAvalible.get(i));
+                    break;
                 }               
             }
         }
         else {
+            System.out.println("Computer has to draw!");
             draw1CardCom();
+            
             // draw card for the computer 
         }
     }
