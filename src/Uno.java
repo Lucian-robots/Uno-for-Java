@@ -346,7 +346,23 @@ public class Uno {
             System.out.println("Human Uno");
         }
     }
-
+    public boolean isPlayerUno() {
+        if (playerHand.size() == 1) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    public boolean isComputerUno() {
+        if (computerHand.size() == 1) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
     // playerChoice calls the correct method depending on the choice and the card c1
     public String playerChoice(/*ArrayList<unoCards> shuffledDeck, */String choice, unoCards c1) {
 
@@ -458,12 +474,12 @@ public class Uno {
         return playerHand.get(0);
     }
     public boolean computerCardFindBool(String wantedColor, String wantedValue) {
-        if (computerHand.get(i).getColor().equals(wantedColor) && computerHand.get(i).getValue().equals(wantedValue)) {
-            return true;
+        for (int i = 0; i < computerHand.size(); i++) {
+            if (computerHand.get(i).getColor().equals(wantedColor) && computerHand.get(i).getValue().equals(wantedValue)) {
+                return true;
+            }
         }
-        else {
-            return false;
-        }
+        return false;
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
       
@@ -528,9 +544,11 @@ public class Uno {
                 System.out.println(playerHand);
                 makeCardsAvalible();
             }
+            computerChoice();
         }
+         
         //System.out.println(playerHand);
-        //makeCardsAvalible();
+        //makeCardsAvalible(); 
     }
     
     public static void main(String[] args) { 
@@ -573,7 +591,17 @@ public class Uno {
                 computerChoice();
             }
         }
-        
+        else if (isPlayerUno() == true) {
+            if (computerCardFindBool("Wild", "Draw 4") == true) {
+                playCard(computerCardFind("Wild", "Draw 4"));
+            }
+            else if (computerCardFindBool(currentColor, "Draw 2") == true) {
+                playCard(computerCardFind(currentColor, "Draw 2"));
+            }
+        }
+        else {
+            computerChoice();
+        }
         
     } 
     public String computerColorChoice() {
@@ -631,7 +659,7 @@ public class Uno {
         }
         return null;
     }
-    public void draw1CardCom() {      
+    public void draw1CardCom() {
         unoCards c1 = new unoCards(shuffledDeck.get(0).getColor(), shuffledDeck.get(0).getValue());
         computerHand.add(c1);
         shuffledDeck.remove(0);
@@ -660,4 +688,4 @@ public class Uno {
     }
 } 
 
-// hi 
+// hi   
