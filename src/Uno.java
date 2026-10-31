@@ -447,8 +447,24 @@ public class Uno {
     public void currentPlayedValue() {
         currentValue = shuffledDeck.get(0).getValue();
     }
- 
     
+    // needs to see if the player has the card im looking for, then return that card? Only needs to work with computer bc player chooses their own cards 
+    public unoCards computerCardFind(String wantedColor, String wantedValue) {
+        for (int i = 0; i < computerHand.size(); i++) {
+            if (computerHand.get(i).getColor().equals(wantedColor) && computerHand.get(i).getValue().equals(wantedValue)) {
+                return computerHand.get(i);
+            }
+        }
+        return playerHand.get(0);
+    }
+    public boolean computerCardFindBool(String wantedColor, String wantedValue) {
+        if (computerHand.get(i).getColor().equals(wantedColor) && computerHand.get(i).getValue().equals(wantedValue)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
       
     public void gameDriver() {
@@ -533,12 +549,31 @@ public class Uno {
         // draw 1 card
         //System.out.println(game.draw1Card(shuffledDeck));
     }
-
-
+    // method to check if the top card is a draw card
+    public boolean isTopCardDraw() {
+        if (currentValue.equals("Draw 4") || currentValue.equals("Draw 2")) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     /*
     needs to check if theres a wild card, index how many cards they have of that color, then choose accordingly
     */
     public void computerPlayer() {
+        if (pctd > 0 && isTopCardDraw() == true) {
+            if (computerCardFindBool("Wild", "Draw 4") == true) {
+                playCard(computerCardFind("Wild", "Draw 4"));
+            }
+            else if (computerCardFindBool(currentColor, "Draw 2") == true) {
+                playCard(computerCardFind(currentColor, "Draw 2"));
+            }
+            else {
+                computerChoice();
+            }
+        }
+        
         
     } 
     public String computerColorChoice() {
@@ -625,4 +660,4 @@ public class Uno {
     }
 } 
 
-// hi
+// hi 
