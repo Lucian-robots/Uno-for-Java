@@ -8,6 +8,7 @@ public class Uno {
     public ArrayList<unoCards> playerHand;
     public ArrayList<unoCards> computerHand;
     public ArrayList<unoCards> playerCardsAvalible = new ArrayList<>();
+    public ArrayList<unoCards> computerCardsAvalible = new ArrayList<>();
 
     public int players;
     // player turn = -1 for bot and 1 for human player
@@ -249,7 +250,7 @@ public class Uno {
     // play card method, checks card that is played and outputs the result. Updates pct, currentColor, currentValue
     public String playCard(unoCards c1) {
         if (c1.getValue().equals("Reverse")) {
-            currentValue = "-1";
+            //currentValue = "Reverse";
             playerTurn = -(playerTurn);
             currentColor = c1.getColor();
             currentValue = c1.getValue();
@@ -359,7 +360,21 @@ public class Uno {
     }
     
 
-    // this is the big problem. Needs to make sure if you have 4 draw 4's that they can't exist and also needs to check how many are in the shuffle deck
+    public void makeCardsAvalible() {
+
+        playerCardsAvalible.clear();
+        for (int i = 0; i < playerHand.size(); i++) {
+            if ((playerHand.get(i).getColor()).equals(currentColor)) {
+                playerCardsAvalible.add(playerHand.get(i));
+            }
+            else if (playerHand.get(i).getValue().equals(currentValue)) {
+                playerCardsAvalible.add(playerHand.get(i));
+            }
+            else {
+                // nothing happens delete this 
+            }
+        }
+         // this is the big problem. Needs to make sure if you have 4 draw 4's that they can't exist and also needs to check how many are in the shuffle deck
     /*
     first, it needs to check if the card in the array list exists either 1 time in the deck, or in the players hand
         next it needs to check how many of that card exist in the memory / deck
@@ -390,21 +405,22 @@ public class Uno {
 
         at the beginning, check if the card has 2 variants, 1 variant, or 4 variants
     */
-    public void makeCardsAvalible() {
-        playerCardsAvalible.clear();
-        for (int i = 0; i < playerHand.size(); i++) {
-            if ((playerHand.get(i).getColor()).equals(currentColor)) {
-                playerCardsAvalible.add(playerHand.get(i));
+    }
+    //
+     public void makeCardsAvalibleCOM() {
+        computerCardsAvalible.clear();
+        for (int i = 0; i < computerHand.size(); i++) {
+            if ((computerHand.get(i).getColor()).equals(currentColor)) {
+                computerCardsAvalible.add(playerHand.get(i));
             }
             else if (playerHand.get(i).getValue().equals(currentValue)) {
-                playerCardsAvalible.add(playerHand.get(i));
+                computerCardsAvalible.add(computerHand.get(i));
             }
             else {
                 // nothing happens delete this 
             }
         }
     }
-
     public void makeSureWildNotFirst() {
         if ((shuffledDeck.get(0).getColor()).equals("Wild")) {
             unoCards c2 = new unoCards(shuffledDeck.get(0).getColor(), shuffledDeck.get(0).getValue());
@@ -416,7 +432,7 @@ public class Uno {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
     // making update methods so gameDriver isn't a bunch of copying and pasting the same commands
-     
+      
     // to check value of card in discard pile
     public void currentDiscardValue() {
         currentValue = discardPile.get(discardPile.size()-1).getValue();    
@@ -431,7 +447,7 @@ public class Uno {
     public void currentPlayedValue() {
         currentValue = shuffledDeck.get(0).getValue();
     }
-
+ 
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
       
@@ -517,4 +533,96 @@ public class Uno {
         // draw 1 card
         //System.out.println(game.draw1Card(shuffledDeck));
     }
+
+
+    /*
+    needs to check if theres a wild card, index how many cards they have of that color, then choose accordingly
+    */
+    public void computerPlayer() {
+        
+    } 
+    public String computerColorChoice() {
+        int blueCards = 0;
+        int wildCards = 0;
+        int redCards = 0;
+        int greenCards = 0;
+        int yellowCards = 0;
+        
+        for (int i = 0; i < computerHand.size(); i++) {
+            if (computerHand.get(i).getColor().equals("Green")) {
+                greenCards++;
+            }
+            else if (computerHand.get(i).getColor().equals("Blue")) {
+                blueCards++;
+            }
+            else if (computerHand.get(i).getColor().equals("Yellow")) {
+                yellowCards++;
+            }
+            else if (computerHand.get(i).getColor().equals("Red")) {
+                redCards++;
+            } 
+            else {
+                wildCards++;
+            }
+        }
+        // using those values choose which color
+        if (blueCards >= redCards && blueCards>=yellowCards && blueCards>=greenCards && blueCards>=wildCards) {
+            return "Blue";
+        }
+        else if (yellowCards >= yellowCards && yellowCards>=blueCards && yellowCards>=greenCards && yellowCards>=wildCards) {
+            return "Yellow";
+        }
+        else if (redCards >= blueCards && redCards>=yellowCards && redCards>=greenCards && redCards>=wildCards) {
+            return "Red";
+        }
+        else if (greenCards >= redCards && greenCards>=yellowCards && greenCards>=blueCards && greenCards>=wildCards) {
+            return "Green";
+        }
+        else if (wildCards >= redCards && wildCards>=yellowCards && wildCards>=greenCards && wildCards>=blueCards) {
+            return "Wild";
+        }
+        else {
+            return "Invalid";
+        }
+    }
+    public unoCards findNumCard() {
+        for (int i = 0; i < computerCardsAvalible.size(); i++) {
+            if (!(computerCardsAvalible.get(i).getColor().equals(currentColor)) && computerCardsAvalible.get(i).getValue().equals(currentValue)) {
+                return computerCardsAvalible.get(i);
+            }
+            else {
+                //return null;
+            }
+        }
+        return null;
+    }
+    public void draw1CardCom() {      
+        unoCards c1 = new unoCards(shuffledDeck.get(0).getColor(), shuffledDeck.get(0).getValue());
+        computerHand.add(c1);
+        shuffledDeck.remove(0);
+    }
+    public void computerChoice() {
+        // needs to know that top card, depends on what cards there are left in deck. also, needs to pick its own cards. use MakeCardsAvalible for computer player or sum
+        if (!(computerCardsAvalible.isEmpty())) {
+            for (int i = 0; i < computerCardsAvalible.size(); i++) {
+                if (isCorrectValue(computerCardsAvalible.get(i)) == true) {   
+                    if (!(computerColorChoice().equals(currentColor))) {                  
+                        playCard(findNumCard());
+                    } 
+                }
+                else if (computerCardsAvalible.get(i).getColor().equals("Wild")) {
+                    playCard(computerCardsAvalible.get(i));
+                }
+                else if (computerCardsAvalible.get(i).getColor().equals(currentColor)) {
+                    playCard(computerCardsAvalible.get(i));
+                }               
+            }
+        }
+        else {
+            draw1CardCom();
+            // draw card for the computer 
+        }
+    }
 } 
+
+// hi
