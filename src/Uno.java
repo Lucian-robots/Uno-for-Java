@@ -249,6 +249,7 @@ public class Uno {
     }
     // play card method, checks card that is played and outputs the result. Updates pct, currentColor, currentValue
     public String playCard(unoCards c1) {
+        discardPile.add(c1);
         if (c1.getValue().equals("Reverse")) {
             //currentValue = "Reverse";
             playerTurn = -(playerTurn);
@@ -258,9 +259,7 @@ public class Uno {
             computerCardsAvalible.remove(c1);
             playerHand.remove(c1);
             playerCardsAvalible.remove(c1);
-            discardPile.add(c1);
             return ("Play is reversed!"); 
-
         }
         else if (c1.getValue().equals("Skip") && isCorrectColor(c1) == true) {
             pctd = 0;
@@ -271,7 +270,6 @@ public class Uno {
             computerCardsAvalible.remove(c1);
             playerHand.remove(c1);
             playerCardsAvalible.remove(c1);
-            discardPile.add(c1);
             return ("Next player skipped!");
         }
         else if (c1.getValue().equals("")) {
@@ -282,7 +280,6 @@ public class Uno {
             computerCardsAvalible.remove(c1);
             playerHand.remove(c1);
             playerCardsAvalible.remove(c1);
-            discardPile.add(c1);
             return "Wild card, choose color";
 
         }
@@ -295,7 +292,6 @@ public class Uno {
             computerCardsAvalible.remove(c1);
             playerHand.remove(c1);
             playerCardsAvalible.remove(c1);
-            discardPile.add(c1);
             for (int i = 0; i < 4; i++) {
                 draw1Card();
             }
@@ -310,7 +306,6 @@ public class Uno {
             computerCardsAvalible.remove(c1);
             playerHand.remove(c1);
             playerCardsAvalible.remove(c1);
-            discardPile.add(c1);
             for (int i = 0; i < 2; i++) {
                 draw1Card();
             }
@@ -318,7 +313,6 @@ public class Uno {
         }
         else if ((c1.getValue().equals("0") || c1.getValue().equals("1") || c1.getValue().equals("2") || c1.getValue().equals("3") || c1.getValue().equals("4") || c1.getValue().equals("5") || c1.getValue().equals("6") || c1.getValue().equals("7") || c1.getValue().equals("8") || c1.getValue().equals("9")) && isCorrectColor(c1) == true) {
             currentValue = c1.getValue();
-
             discardPile(c1);     
             playerTurn = -(playerTurn);
             currentColor = c1.getColor();
@@ -327,7 +321,6 @@ public class Uno {
             computerCardsAvalible.remove(c1);
             playerHand.remove(c1);
             playerCardsAvalible.remove(c1);
-            discardPile.add(c1);
             return "Card played, next persons turn";
         }
         else if((!(c1.getColor().equals(currentColor))) || c1.getValue().equals(currentValue)) {
@@ -340,14 +333,12 @@ public class Uno {
                 computerCardsAvalible.remove(c1);
                 playerHand.remove(c1);
                 playerCardsAvalible.remove(c1);
-                discardPile.add(c1);
                 return "Card played";
             }
             else {
                 currentColor = c1.getColor();
                 currentValue = c1.getValue();
                 pctd+=1;
-                discardPile.add(c1);
                 return "Incorrect color, you have to draw";
             }
         }
@@ -467,12 +458,12 @@ public class Uno {
 
         }
     }
-
+    
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
     // making update methods so gameDriver isn't a bunch of copying and pasting the same commands
     // make sure deck isn't completely gone so there isn't an error
     public boolean isDeckGone() {
-        if (shuffledDeck.size() < 8) {
+        if (shuffledDeck.size() < 8 || shuffledDeck.size() < 1) {
             return true;
         }
         else {
@@ -585,13 +576,13 @@ public class Uno {
             // check if they have to draw
             if (isDeckGone() == true) {
                 System.out.println("\n\nTHE DECK NEEDS TO BE RE-SHUFFLED\n\n");
+                System.out.println("discard pile: " + discardPile);
+                System.out.println("Shuffled pile: " + shuffledDeck);
                 shuffledDeck = discardPile;
-                discardPile.clear();
-
             }
             else {
                 playerChoices(); 
-                computerPlayer();  
+                computerPlayer();   
             }
         }
         System.out.println("COMPUTER PLAYER WINS!!!");
@@ -622,7 +613,7 @@ public class Uno {
             return true;
         }
         else {
-            return false;
+            return false; 
         }
     }
     /*
