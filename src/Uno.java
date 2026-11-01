@@ -458,7 +458,7 @@ public class Uno {
 
         }
     }
-    
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
     // making update methods so gameDriver isn't a bunch of copying and pasting the same commands
     // make sure deck isn't completely gone so there isn't an error
@@ -750,3 +750,10 @@ public class Uno {
 }  
 
 // hi  
+
+/*
+pros of javafx:
+
+cons of javafx:
+    hard to learn
+*/
