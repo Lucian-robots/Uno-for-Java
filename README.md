@@ -1,14 +1,33 @@
-Uno for Java is exactly what it is.
+# Uno Game
 
-## How to play:
-um, it's not done yet so I will update this later
+Welcome to the Uno Game, follow the quick steps below to set up and run the game on your mac.
 
-RN in the itch.io (in the project in terra) has the .jar file BUT IT DOESN'T RUN YET. It has errors in it so it cannot run. I have a screenshot of the output and recording of it here: 
+## How to Install and Run
 
-https://github.com/user-attachments/assets/56e107ef-68e4-4eb9-bc98-53b965c1a2e9
+### Step 1: Open the Installer
+1. Navigate to your `unoDistro` folder.
+2. Double-click the **UnoGame.dmg** file to open it.
 
+### Step 2: Move the Application
+1. Drag the **UnoGame** application icon into your Mac's **Applications** folder (or into the `unoDistro` folder alongside your script).
 
+### Step 3: Launch the Game
+* Simply double-click the **run.command** file to launch the game instantly.
 
-## How it's made:
-I made it using a unoCards class that has a constructor for an uno card and has a few getter methods and then the main Uno file has all of the game stuff. 
-The project is a WIP and I still haven't coded an opponent player. Maybe I will add a GUI if I have time.
+---
+
+## Troubleshooting (First-Time Setup)
+
+### "Permission Denied" Error
+If macOS blocks the `.command` file from opening, your system needs permission to run it. 
+1. Open your Mac's **Terminal** app.
+2. Type the following command and hit **Enter**:
+   ```bash
+   chmod +x ~/Documents/unoDistro/run.command
+   ```
+
+### "Developer Cannot Be Verified" Error
+Because the app is built locally, macOS Gatekeeper might show a security warning the first time you open it.
+1. Go to your Mac's **System Settings** > **Privacy & Security**.
+2. Scroll down to the **Security** section.
+3. Click **Open Anyway** next to the warning about UnoGame.
